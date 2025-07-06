@@ -1,0 +1,12 @@
+on: [push]
+
+jobs:
+  build:
+  name: Hello world 
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v2
+  - name: write a multi-line message
+    run:
+      echo this file shows a 
+      echo written by yohannes Alemu
