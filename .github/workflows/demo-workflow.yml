@@ -2,11 +2,27 @@ on: [push]
 
 jobs:
   build:
-    name: Hello world 
+    name: python test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: write a multi-line message
+      - name: uses python 
+      - uses: actions/setup-python@v4
+        with:
+          python-version :['3.8','3.10']
+      - name: intall depedencees 
+        run: |
+          python pip install --upgrade pip 
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Linting proroject with flake8
         run:
-          echo this file shows a 
-          echo written by yohannes Alemu
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    run: |
+      pip install pytest
+      pip install pytest-cov
+      pytest tests/test_rag.py
+
+
+       
