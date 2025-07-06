@@ -1,28 +1,29 @@
+name: Demo Python Workflow
 on: [push]
-
 jobs:
   build:
-    name: python test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.10"]
+
     steps:
-      - uses: actions/checkout@v2
-      - name: uses python 
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v3
+      - name: Set up Python for Demo
+        uses: actions/setup-python@v4
         with:
-          python-version :['3.8','3.10']
-      - name: intall depedencees 
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies for demo Python project  
         run: |
-          python pip install --upgrade pip 
+          python -m pip install --upgrade pip
           pip install flake8 pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Linting proroject with flake8
-        run:
+      - name: Linting project with flake8
+        run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    run: |
-      pip install pytest
-      pip install pytest-cov
-      pytest tests/test_rag.py
-
-
-       
+      - name: Testing the project using pytest
+   run: |
+     pip install pytest
+     pip install pytest-cov
+     pytest tests/test_rag.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
