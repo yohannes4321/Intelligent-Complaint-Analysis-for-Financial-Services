@@ -1,0 +1,7 @@
+langchain
+langchain_chroma
+langchain_community
+dotenv
+pandas
+Fastapi
+pydantic 
